@@ -1,0 +1,20 @@
+{
+  "name": "own-galaxy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite --base /galaxy/solar"
+  },
+  "keywords": [],
+  "author": "dungva1505@gmail.com",
+  "license": "ISC",
+  "dependencies": {
+    "dat.gui": "^0.7.9",
+    "three": "^0.158.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.54.0",
+    "vite": "^5.0.2"
+  }
+}

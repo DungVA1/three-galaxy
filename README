@@ -1,0 +1,13 @@
+This is just a project to study about THREEjs
+
+Business:
+- I just want to use THREE to visualize own Solar
+- The center is Sun, it will rotate be ifself
+- All planets of Solar will rotate around the Sun and rotate by itself also
+- Build some planet's ring, planet's satellite
+
+To run app:
+- Open your terminal and go to project
+- Run command `npm start`
+- See on your terminal, app will run on a local server with URL display on terminal
+- Click or copy this URL and paste to your browser
