@@ -40,7 +40,7 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 // Set position for camera (x, y, z)
-camera.position.set(0, 3, 300);
+camera.position.set(0, 3, 150);
 
 // Create a RENDERER
 const renderer = new THREE.WebGLRenderer();
