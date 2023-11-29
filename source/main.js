@@ -49,11 +49,13 @@ const gui = new GUI();
 const options = {
   displayAxis: false,
   rotate: true,
+  speed: 0.01,
   wireFrame: false,
 };
 gui.add(options, 'rotate');
 gui.add(options, 'displayAxis');
 gui.add(options, 'wireFrame');
+gui.add(options, 'speed', 0.01, 1);
 
 // Create an object HERE
 // Create a geometry for object
@@ -82,30 +84,30 @@ const createPlanet = (size, positions, texture, satellite) => {
   planet.position.y = positions[1] || 0;
   planet.position.z = positions[2] || 0;
 
+  const sunStar = new THREE.Object3D();
+  let satelliteMesh;
   if (satellite) {
     const satelliteGeo = new THREE.SphereGeometry(satellite.size);
     const satelliteMat = new THREE.MeshStandardMaterial({
       map: textureLoader.load(satellite.texture),
     });
-    const satelliteMesh = new THREE.Mesh(satelliteGeo, satelliteMat);
-    satelliteMesh.position.x = satellite.position[0] || 0;
-    planet.add(satelliteMesh);
-    scene.add(satelliteMesh);
+    satelliteMesh = new THREE.Mesh(satelliteGeo, satelliteMat);
+    satelliteMesh.position.x = satellite.positions[0] || 0;
+    sunStar.add(satelliteMesh);
   }
 
-  const sunStar = new THREE.Object3D();
   sunStar.add(planet);
   scene.add(sunStar);
 
-  return { planet, sunStar };
+  return { planet, sunStar, satelliteMesh };
 };
 
-const mercury = createPlanet(0.1, [2], mercuryTexture, {
-  size: 0.01,
-  position: [2.2],
+const mercury = createPlanet(0.1, [2], mercuryTexture);
+const earth = createPlanet(0.3, [4], earthTexture, {
+  size: 0.15,
+  positions: [3.6],
   texture: moonTexture,
 });
-const earth = createPlanet(0.3, [4], earthTexture);
 const mars = createPlanet(0.5, [6], marsTexture);
 
 const pointLight = new THREE.PointLight(0xFFFFFF, 50, 300);
@@ -125,16 +127,17 @@ const animate = () => {
   // Refresh app frame follow screen refresh frame
   requestAnimationFrame(animate);
   if (options.rotate) {
-    sun.rotateY(0.001);
+    sun.rotateY(0.001 * options.speed);
 
-    mercury.planet.rotateY(-0.01);
-    mercury.sunStar.rotateY(0.009);
+    mercury.planet.rotateY(-0.1 * options.speed);
+    mercury.sunStar.rotateY(0.009 * options.speed);
 
-    earth.planet.rotateY(0.03);
-    earth.sunStar.rotateY(0.005);
+    earth.planet.rotateY(0.03 * options.speed);
+    earth.satelliteMesh.rotateY(0.1 * options.speed);
+    earth.sunStar.rotateY(0.005 * options.speed);
 
-    mars.planet.rotateY(0.019);
-    mars.sunStar.rotateY(0.001);
+    mars.planet.rotateY(0.019 * options.speed);
+    mars.sunStar.rotateY(0.001 * options.speed);
   }
 
   if (options.displayAxis) {
