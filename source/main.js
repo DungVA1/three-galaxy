@@ -6,9 +6,14 @@ import { GUI } from 'dat.gui';
 import stars from './static/stars.jpg';
 import sunTexture from './static/sun.jpg';
 import mercuryTexture from './static/mercury.jpg';
+import venusTexture from './static/venus.jpg';
 import earthTexture from './static/earth.jpg';
 import moonTexture from './static/moon.jpg';
 import marsTexture from './static/mars.jpg';
+import jupiterTexture from './static/jupiter.jpg';
+import saturnTexture from './static/saturn.jpg';
+import uranusTexture from './static/uranus.jpg';
+import neptuneTexture from './static/neptune.jpg';
 
 // Create a SCENE
 const scene = new THREE.Scene();
@@ -33,7 +38,7 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 // Set position for camera (x, y, z)
-camera.position.set(0, 3, 5);
+camera.position.set(0, 3, 300);
 
 // Create a RENDERER
 const renderer = new THREE.WebGLRenderer();
@@ -49,7 +54,7 @@ const gui = new GUI();
 const options = {
   displayAxis: false,
   rotate: true,
-  speed: 0.01,
+  speed: 0.5,
   wireFrame: false,
 };
 gui.add(options, 'rotate');
@@ -59,7 +64,7 @@ gui.add(options, 'speed', 0.01, 1);
 
 // Create an object HERE
 // Create a geometry for object
-const sunGeometry = new THREE.SphereGeometry(1);
+const sunGeometry = new THREE.SphereGeometry(10);
 // Create a material for object, meterial is an object includes object's attribute
 const sunMaterial = new THREE.MeshBasicMaterial({
   color: 0xFFFFFF,
@@ -102,20 +107,24 @@ const createPlanet = (size, positions, texture, satellite) => {
   return { planet, sunStar, satelliteMesh };
 };
 
-const mercury = createPlanet(0.1, [2], mercuryTexture);
-const earth = createPlanet(0.3, [4], earthTexture, {
-  size: 0.15,
-  positions: [3.6],
+const mercury = createPlanet(0.5, [16], mercuryTexture);
+const venus = createPlanet(1, [25], venusTexture);
+const earth = createPlanet(1.5, [35], earthTexture, {
+  size: 0.4,
+  positions: [32],
   texture: moonTexture,
 });
-const mars = createPlanet(0.5, [6], marsTexture);
+const mars = createPlanet(1, [45], marsTexture);
+const jupiter = createPlanet(5, [60], jupiterTexture);
+const saturn = createPlanet(4.7, [80], saturnTexture);
+const uranus = createPlanet(4, [100], uranusTexture);
+const neptune = createPlanet(4, [120], neptuneTexture);
 
-const pointLight = new THREE.PointLight(0xFFFFFF, 50, 300);
+const pointLight = new THREE.PointLight(0xFFFFFF, 1000, 3000);
 scene.add(pointLight);
+
 const ambientLight = new THREE.AmbientLight(0x333333, 2);
 scene.add(ambientLight);
-const pointLightHelper = new THREE.PointLightHelper(pointLight, 300);
-scene.add(pointLightHelper);
 
 // Add all addons, helper HERE
 // Create an Orbit control, this addons to camera focus to object
@@ -132,12 +141,30 @@ const animate = () => {
     mercury.planet.rotateY(-0.1 * options.speed);
     mercury.sunStar.rotateY(0.009 * options.speed);
 
+    venus.planet.rotateY(0.1 * options.speed);
+    venus.sunStar.rotateY(0.007 * options.speed);
+
     earth.planet.rotateY(0.03 * options.speed);
     earth.satelliteMesh.rotateY(0.1 * options.speed);
     earth.sunStar.rotateY(0.005 * options.speed);
 
     mars.planet.rotateY(0.019 * options.speed);
     mars.sunStar.rotateY(0.001 * options.speed);
+
+    jupiter.planet.rotateY(0.019 * options.speed);
+    jupiter.sunStar.rotateY(0.0006 * options.speed);
+
+    jupiter.planet.rotateY(0.019 * options.speed);
+    jupiter.sunStar.rotateY(0.0006 * options.speed);
+
+    saturn.planet.rotateY(0.019 * options.speed);
+    saturn.sunStar.rotateY(0.0005 * options.speed);
+
+    uranus.planet.rotateY(0.019 * options.speed);
+    uranus.sunStar.rotateY(0.0004 * options.speed);
+
+    neptune.planet.rotateY(0.019 * options.speed);
+    neptune.sunStar.rotateY(0.0003 * options.speed);
   }
 
   if (options.displayAxis) {
