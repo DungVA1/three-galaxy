@@ -121,7 +121,7 @@ const createPlanet = (size, positions, texture, { satellite, ring } = {}) => {
   sunStar.add(planet);
   scene.add(sunStar);
 
-  return { planet, sunStar, satelliteMesh };
+  return { planet, sunStar, satelliteMesh, ringMesh };
 };
 
 const mercury = createPlanet(0.5, [16], mercuryTexture);
@@ -156,11 +156,11 @@ const neptune = createPlanet(4, [120], neptuneTexture);
 
 const pointLight = new THREE.PointLight(0xFFFFFF, 8000, 3000);
 pointLight.castShadow = true;
-pointLight.shadow.mapSize.width = 1000;
-pointLight.shadow.mapSize.height = 1000;
+pointLight.shadow.mapSize.width = 10000;
+pointLight.shadow.mapSize.height = 10000;
 scene.add(pointLight);
 
-const ambientLight = new THREE.AmbientLight(0x333333, 2);
+const ambientLight = new THREE.AmbientLight(0x333333, 5);
 scene.add(ambientLight);
 
 // Add all addons, helper HERE
