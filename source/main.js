@@ -102,7 +102,7 @@ const createPlanet = (size, positions, texture, { satellite, ring } = {}) => {
     });
     satelliteMesh = new THREE.Mesh(satelliteGeo, satelliteMat);
     satelliteMesh.position.x = satellite.positions[0] || 0;
-    sunStar.add(satelliteMesh);
+    planet.add(satelliteMesh);
   }
 
   let ringMesh;
@@ -129,7 +129,7 @@ const venus = createPlanet(1, [25], venusTexture);
 const earth = createPlanet(1.5, [35], earthTexture, {
   satellite: {
     size: 0.4,
-    positions: [32],
+    positions: [3],
     texture: moonTexture,
   },
 });
