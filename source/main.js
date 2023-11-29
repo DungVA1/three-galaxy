@@ -12,7 +12,9 @@ import moonTexture from './static/moon.jpg';
 import marsTexture from './static/mars.jpg';
 import jupiterTexture from './static/jupiter.jpg';
 import saturnTexture from './static/saturn.jpg';
+import saturnRingTexture from './static/saturn_ring.jpg';
 import uranusTexture from './static/uranus.jpg';
+import uranusRingTexture from './static/uranus_ring.jpg';
 import neptuneTexture from './static/neptune.jpg';
 
 // Create a SCENE
@@ -43,6 +45,8 @@ camera.position.set(0, 3, 300);
 // Create a RENDERER
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 // Add dom rendered by renderer
 document.body.appendChild(renderer.domElement);
@@ -78,7 +82,7 @@ const sun = new THREE.Mesh(sunGeometry, sunMaterial);
 scene.add(sun);
 
 // Create a function to build planets
-const createPlanet = (size, positions, texture, satellite) => {
+const createPlanet = (size, positions, texture, { satellite, ring } = {}) => {
   // Do the same with Sun
   const planetGeometry = new THREE.SphereGeometry(size);
   const planetMaterial = new THREE.MeshStandardMaterial({
@@ -101,6 +105,19 @@ const createPlanet = (size, positions, texture, satellite) => {
     sunStar.add(satelliteMesh);
   }
 
+  let ringMesh;
+  if (ring) {
+    const ringGeo = new THREE.RingGeometry(ring.size, ring.size + 3, 32);
+    const ringMat = new THREE.MeshStandardMaterial({
+      map: textureLoader.load(ring.texture),
+    });
+    ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.position.x = ring.positions[0] || 0;
+    ringMesh.rotateX(0.5 * Math.PI);
+    ringMesh.rotateY(10);
+    sunStar.add(ringMesh);
+  }
+
   sunStar.add(planet);
   scene.add(sunStar);
 
@@ -110,17 +127,37 @@ const createPlanet = (size, positions, texture, satellite) => {
 const mercury = createPlanet(0.5, [16], mercuryTexture);
 const venus = createPlanet(1, [25], venusTexture);
 const earth = createPlanet(1.5, [35], earthTexture, {
-  size: 0.4,
-  positions: [32],
-  texture: moonTexture,
+  satellite: {
+    size: 0.4,
+    positions: [32],
+    texture: moonTexture,
+  },
 });
+earth.planet.receiveShadow = true;
+earth.satelliteMesh.castShadow = true;
+
 const mars = createPlanet(1, [45], marsTexture);
 const jupiter = createPlanet(5, [60], jupiterTexture);
-const saturn = createPlanet(4.7, [80], saturnTexture);
-const uranus = createPlanet(4, [100], uranusTexture);
+const saturn = createPlanet(4.7, [80], saturnTexture, {
+  ring: {
+    size: 7,
+    positions: [80],
+    texture: saturnRingTexture,
+  },
+});
+const uranus = createPlanet(4, [100], uranusTexture, {
+  ring: {
+    size: 7,
+    positions: [100],
+    texture: uranusRingTexture,
+  },
+});
 const neptune = createPlanet(4, [120], neptuneTexture);
 
-const pointLight = new THREE.PointLight(0xFFFFFF, 1000, 3000);
+const pointLight = new THREE.PointLight(0xFFFFFF, 8000, 3000);
+pointLight.castShadow = true;
+pointLight.shadow.mapSize.width = 1000;
+pointLight.shadow.mapSize.height = 1000;
 scene.add(pointLight);
 
 const ambientLight = new THREE.AmbientLight(0x333333, 2);
@@ -146,25 +183,22 @@ const animate = () => {
 
     earth.planet.rotateY(0.03 * options.speed);
     earth.satelliteMesh.rotateY(0.1 * options.speed);
-    earth.sunStar.rotateY(0.005 * options.speed);
+    earth.sunStar.rotateY(0.006 * options.speed);
 
     mars.planet.rotateY(0.019 * options.speed);
-    mars.sunStar.rotateY(0.001 * options.speed);
+    mars.sunStar.rotateY(0.005 * options.speed);
 
     jupiter.planet.rotateY(0.019 * options.speed);
-    jupiter.sunStar.rotateY(0.0006 * options.speed);
-
-    jupiter.planet.rotateY(0.019 * options.speed);
-    jupiter.sunStar.rotateY(0.0006 * options.speed);
+    jupiter.sunStar.rotateY(0.004 * options.speed);
 
     saturn.planet.rotateY(0.019 * options.speed);
-    saturn.sunStar.rotateY(0.0005 * options.speed);
+    saturn.sunStar.rotateY(0.003 * options.speed);
 
     uranus.planet.rotateY(0.019 * options.speed);
-    uranus.sunStar.rotateY(0.0004 * options.speed);
+    uranus.sunStar.rotateY(0.002 * options.speed);
 
     neptune.planet.rotateY(0.019 * options.speed);
-    neptune.sunStar.rotateY(0.0003 * options.speed);
+    neptune.sunStar.rotateY(0.001 * options.speed);
   }
 
   if (options.displayAxis) {
