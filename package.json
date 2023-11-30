@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "vite preview",
-    "build": "vite build"
+    "watch": "vite --base /galaxy/solar",
+    "build": "vite build",
+    "start": "vite preview"
   },
   "keywords": [],
   "author": "dungva1505@gmail.com",
